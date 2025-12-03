@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
-import mysql.connector
+import psycopg2
 from dotenv import load_dotenv
 import os
 from pathlib import Path
@@ -12,18 +13,21 @@ st.set_page_config(page_title="Dashboard Qualidade da Água", layout="wide")
 st.title("Dashboard de Qualidade da Água")
 
 BASE_DIR = Path(__file__).resolve().parent
-ENV_PATH = (BASE_DIR / ".." / ".env").resolve()
+
+ENV_PATH = BASE_DIR / ".." / ".env"
+
+ENV_PATH = ENV_PATH.resolve()
+
 load_dotenv(ENV_PATH)
 
 
 @st.cache_data
 def load_data():
-    conn = mysql.connector.connect(
-        host=os.getenv("MYSQL_HOST"),
-        user=os.getenv("MYSQL_USER"),
-        password=os.getenv("MYSQL_PASSWORD"),
-        database=os.getenv("MYSQL_DATABASE"),
-        port=os.getenv("MYSQL_PORT", 3306),
+    conn = psycopg2.connect(
+        host=os.getenv("POSTGRES_HOST"),
+        database=os.getenv("POSTGRES_USER"),
+        user=os.getenv("POSTGRES_USER"),
+        password=os.getenv("POSTGRES_PASSWORD"),
     )
 
     query = """
