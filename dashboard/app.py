@@ -1,8 +1,7 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-import psycopg2
+import mysql.connector
 from dotenv import load_dotenv
 import os
 from pathlib import Path
@@ -13,22 +12,20 @@ st.set_page_config(page_title="Dashboard Qualidade da Água", layout="wide")
 st.title("Dashboard de Qualidade da Água")
 
 BASE_DIR = Path(__file__).resolve().parent
-
-ENV_PATH = BASE_DIR / ".." / ".env"
-
-ENV_PATH = ENV_PATH.resolve()
-
+ENV_PATH = (BASE_DIR / ".." / ".env").resolve()
 load_dotenv(ENV_PATH)
 
 
 @st.cache_data
 def load_data():
-    conn = psycopg2.connect(
-        host=os.getenv("POSTGRES_HOST"),
-        database=os.getenv("POSTGRES_DB"),
-        user=os.getenv("POSTGRES_USER"),
-        password=os.getenv("POSTGRES_PASSWORD"),
+    conn = mysql.connector.connect(
+        host=os.getenv("MYSQL_HOST"),
+        user=os.getenv("MYSQL_USER"),
+        password=os.getenv("MYSQL_PASSWORD"),
+        database=os.getenv("MYSQL_DATABASE"),
+        port=os.getenv("MYSQL_PORT", 3306),
     )
+
     query = """
         SELECT 
             a.id AS amostra_id,
@@ -50,7 +47,8 @@ def load_data():
         LEFT JOIN condutividade c ON c.amostra_id = a.id
         ORDER BY a.id;
     """
-    df = pd.read_sql(query, conn)
+
+    df = pd.read_sql_query(query, conn)
     conn.close()
     return df
 
@@ -85,7 +83,6 @@ with st.sidebar:
     )
 
     st.header("Filtros")
-
     grupos = st.multiselect(
         "Grupo", df["grupo"].dropna().unique(), df["grupo"].dropna().unique()
     )
@@ -102,7 +99,6 @@ df_filtered = df[
 ]
 
 df_region = df_filtered.groupby("regiao")[num_cols].mean().reset_index()
-
 df_region_top10 = df_region.sort_values("ph_arduino", ascending=False).head(10)
 
 blue = "#1f77b4"

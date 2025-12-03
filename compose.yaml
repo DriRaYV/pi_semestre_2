@@ -1,18 +1,18 @@
 services:
-  postgres:
-    build:
-      context: ./docker/db
-      dockerfile: Dockerfile
-    container_name: ${POSTGRES_CONTAINER_NAME}
+  mysql:
+    image: mysql:8.0
+    container_name: ${MYSQL_CONTAINER_NAME}
     ports:
-      - "${POSTGRES_PORT}:5432"
+      - "${MYSQL_PORT}:3306"
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    command: --default-authentication-plugin=mysql_native_password
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - mysqldata:/var/lib/mysql
       - ./docker/db/data/initdb:/docker-entrypoint-initdb.d
 
 volumes:
-  pgdata:
+  mysqldata:
