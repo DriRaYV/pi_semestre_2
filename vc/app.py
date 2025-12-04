@@ -86,13 +86,12 @@ with gr.Blocks() as app:
     gr.HTML(
         """
     <div class="header">
-        <img src="https://i.ibb.co/mr8ZmYTJ/logo1-removebg-preview.png">
-        <img src="https://i.ibb.co/Lhx977xt/logo2-removebg-preview.png">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/EFEI_logo.png">
     </div>
     """
     )
 
-    gr.Markdown("<h1 class='title'>Classificador de Bioincrustação Inteligente</h1>")
+    gr.Markdown("<h1 class='title'>Análise de Turbidez</h1>")
 
     with gr.Row():
         with gr.Column(scale=1):

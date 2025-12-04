@@ -1,5 +1,4 @@
 import pandas as pd
-import pymysql
 from sqlalchemy import create_engine
 from dotenv import load_dotenv
 import os
@@ -15,7 +14,7 @@ engine = create_engine(
 
 df_coleta = pd.read_csv(
     "../planilhas/BcTec 2025_Coleta_Agua - Página1.csv",
-    encoding="latin1",
+    encoding="utf-8",
     sep=None,
     engine="python",
 )
