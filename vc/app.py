@@ -79,6 +79,9 @@ with gr.Blocks() as app:
     .btn-classificar:hover {
         background: #1bb4ea !important;
     }
+
+    .image{
+    }
     </style>
     """
     )
@@ -105,5 +108,12 @@ with gr.Blocks() as app:
             )
             classify_btn = gr.Button("Classificar", elem_classes=["btn-classificar"])
             classify_btn.click(classify, inputs=image_input, outputs=output_label)
+    gr.HTML(
+        """
+<div class="image">
+    <img src="https://i.ibb.co/SX0VQMkS/Screenshot-2025-12-04-122128.png">
+</div>
+"""
+    )
 
 app.launch(server_name="0.0.0.0", server_port=7860, ssr_mode=False)
